@@ -1,6 +1,5 @@
-from utils.pontu_state import *
 import pygame
-from pygame.locals import *
+
 
 class GUIState():
     def __init__(self, width=450, height=500, scale=1, size=5):

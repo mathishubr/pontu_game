@@ -1,4 +1,4 @@
-from utils.pontu_tools import *
+from pontu_tools import *
 import argparse
 
 if __name__ == '__main__':

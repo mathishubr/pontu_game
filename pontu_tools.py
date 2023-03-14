@@ -1,5 +1,5 @@
-from utils.pontu_state import *
-from utils.pontu_gui import *
+from pontu_gui import *
+from pontu_state import PontuState
 import time
 import signal
 import traceback

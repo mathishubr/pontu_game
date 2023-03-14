@@ -72,7 +72,7 @@ To play a turn, you first have to click on a valid elf/pawn, then click on a val
 ### For Windows Users :(
 The game was implemented to run on a Unix machine. If you try to launch a game on Windows, you will have errors!
 
-However by commenting the lines of code 99, 100 and 105 of the ```utils/pontu_tools.py``` file, you should be able to run Pontu Windows. However, the game will not stop if a player has exceeded his time budget.
+However by commenting the lines of code 99, 100 and 105 of the ```pontu_tools.py``` file, you should be able to run Pontu Windows. However, the game will not stop if a player has exceeded his time budget.
 
 **Example:**
 

@@ -1,5 +1,5 @@
 import random
-from utils.agent import Agent
+from agent import Agent
 
 class MyAgent(Agent):
 

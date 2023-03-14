@@ -1,5 +1,3 @@
-import utils.minimax
-
 """
 State history
 """

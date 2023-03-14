@@ -1,5 +1,5 @@
-from utils.agent import AlphaBetaAgent
-import utils.minimax
+from agent import AlphaBetaAgent
+import minimax
 
 """
 Agent skeleton. Fill in the gaps.
@@ -12,7 +12,7 @@ class MyAgent(AlphaBetaAgent):
   def get_action(self, state, last_action, time_left):
     self.last_action = last_action
     self.time_left = time_left
-    return utils.minimax.search(state, self)
+    return minimax.search(state, self)
 
   """
   The successors function must return (or yield) a list of

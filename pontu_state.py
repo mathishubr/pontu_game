@@ -1,5 +1,5 @@
 import random
-from utils.state import State
+from state import State
 from copy import deepcopy
 
 
@@ -102,7 +102,7 @@ class PontuState(State):
         return self.game_over_check()
 
     """
-    Checks if a player succeeded to win the game, i.e. the 3 opponent's pawns are isolated.
+    Checks if a player succeeded to win the game, i.e. move 4 pawns to the other side and back again.
     """
 
     def game_over_check(self):
@@ -155,18 +155,16 @@ class PontuState(State):
         actions = []
         for i in range(self.size-2): # for each pawn
             if not self.blocked[self.cur_player][i]: # if the pawn is not blocked
-                    adj_bridges = self.adj_bridges(self.cur_player,i)
-                    adj_pawns = self.adj_pawns(self.cur_player,i)
-                    for dir in DIRECTIONS: # for each direction
-                        if adj_bridges[dir] and not adj_pawns[dir]: # if there is a bridge and no pawn at the end
-                            for y in range(len(self.h_bridges)): # for each y position of horizontal bridges
-                                for x in range(len(self.h_bridges[y])): # for each x position of the horizontal bridges
-                                    if self.h_bridges[y][x]: # if the horizontal bridge is present
-                                        actions.append((i,dir,'h',x,y)) # add the corresponding action to the list
-                            for y in range(len(self.v_bridges)): # for each y position of vertical bridges
-                                for x in range(len(self.v_bridges[y])): # for each x position of the vertical bridges
-                                    if self.v_bridges[y][x]: # if the vertical bridge is present
-                                        actions.append((i,dir,'v',x,y)) # add the corresponding action to the list
+                    dirs = self.move_dir(self.cur_player,i)
+                    for dir in dirs: # for each direction the pawn can move towards
+                        for y in range(len(self.h_bridges)): # for each y position of horizontal bridges
+                            for x in range(len(self.h_bridges[y])): # for each x position of the horizontal bridges
+                                if self.h_bridges[y][x]: # if the horizontal bridge is present
+                                    actions.append((i,dir,'h',x,y)) # add the corresponding action to the list
+                        for y in range(len(self.v_bridges)): # for each y position of vertical bridges
+                            for x in range(len(self.v_bridges[y])): # for each x position of the vertical bridges
+                                if self.v_bridges[y][x]: # if the vertical bridge is present
+                                    actions.append((i,dir,'v',x,y)) # add the corresponding action to the list
 
         # if there is no action => the pawns can't move but there is still at least one pawn with an adjacent bridge
         if len(actions) == 0:
@@ -192,6 +190,22 @@ class PontuState(State):
             self.blocked[player][pawn] = True
 
     """
+    Check in which direction a pawn can move
+     - player is the id of the pawn's player
+     - pawn is the id of the pawn
+     It returns a list of the directions ('WEST','NORTH','EAST','SOUTH') it can move towards
+    """
+    def move_dir(self,player,pawn):
+        dirs = []
+        adj_bridges = self.adj_bridges(player, pawn)
+        adj_pawns = self.adj_pawns(player, pawn)
+        for dir in DIRECTIONS:
+            if adj_bridges[dir] and not adj_pawns[dir]:
+                dirs.append(dir)
+        return dirs
+
+
+    """
     Check the for presence of bridges adjacent to a specific pawn
      - player is the id of the pawn's player
      - pawn is the id of the pawn
@@ -199,25 +213,35 @@ class PontuState(State):
     The associated value is True if there is a bridge in this direction or False if there is none.
     """
     def adj_bridges(self,player,pawn):
-        pos = self.cur_pos[player][pawn]
+        pos = self.get_pawn_position(player,pawn)
+        return self.adj_bridges_pos(pos)
+
+    """
+        Check the for presence of bridges adjacent to a specific isle/position
+         - pos is the tuple (x,y) representing the coordinate of the isle
+        It returns a dictionary with 4 entries : "EAST", "NORTH", "WEST" or "SOUTH".
+        The associated value is True if there is a bridge in this direction or False if there is none.
+        """
+
+    def adj_bridges_pos(self, pos):
         bridges = {}
-        #Check west bridge
+        # Check west bridge
         if pos[0] >= 1:
-            bridges['WEST'] = self.h_bridges[pos[1]][pos[0]-1]
+            bridges['WEST'] = self.h_bridges[pos[1]][pos[0] - 1]
         else:
             bridges['WEST'] = False
         # Check north bridge
         if pos[1] >= 1:
-            bridges['NORTH'] = self.v_bridges[pos[1]-1][pos[0]]
+            bridges['NORTH'] = self.v_bridges[pos[1] - 1][pos[0]]
         else:
             bridges['NORTH'] = False
         # Check east bridge
-        if pos[0] < self.size-1:
+        if pos[0] < self.size - 1:
             bridges['EAST'] = self.h_bridges[pos[1]][pos[0]]
         else:
             bridges['EAST'] = False
         # Check south bridge
-        if pos[1] < self.size-1:
+        if pos[1] < self.size - 1:
             bridges['SOUTH'] = self.v_bridges[pos[1]][pos[0]]
         else:
             bridges['SOUTH'] = False
@@ -232,14 +256,24 @@ class PontuState(State):
     """
 
     def adj_pawns(self, player, pawn):
-        pos = self.cur_pos[player][pawn]
+        pos = self.get_pawn_position(player,pawn)
+        return self.adj_pawns_pos(pos)
+
+    """
+        Check the for presence of pawns adjacent to a specific isle/position
+         - pos is the tuple (x,y) representing the coordinate of the isle
+        It returns a dictionary with 4 entries : "EAST", "NORTH", "WEST" or "SOUTH".
+        The associated value is True if there is a pawn in this direction or False if there is none.
+        """
+
+    def adj_pawns_pos(self, pos):
         pawns = {}
         # Check west island
         west_pawn = False
         if pos[0] >= 1:
             for player in self.cur_pos:
-                for (x,y) in player:
-                    if pos == (x+1,y):
+                for (x, y) in player:
+                    if pos == (x + 1, y):
                         west_pawn = True
         pawns['WEST'] = west_pawn
         # Check north island
@@ -247,7 +281,7 @@ class PontuState(State):
         if pos[1] >= 1:
             for player in self.cur_pos:
                 for (x, y) in player:
-                    if pos == (x, y+1):
+                    if pos == (x, y + 1):
                         north_pawn = True
         pawns['NORTH'] = north_pawn
         # Check east island
@@ -255,7 +289,7 @@ class PontuState(State):
         if pos[0] < self.size - 1:
             for player in self.cur_pos:
                 for (x, y) in player:
-                    if pos == (x-1, y):
+                    if pos == (x - 1, y):
                         east_pawn = True
         pawns['EAST'] = east_pawn
         # Check south island
@@ -263,7 +297,7 @@ class PontuState(State):
         if pos[1] < self.size - 1:
             for player in self.cur_pos:
                 for (x, y) in player:
-                    if pos == (x, y-1):
+                    if pos == (x, y - 1):
                         south_pawn = True
         pawns['SOUTH'] = south_pawn
         return pawns

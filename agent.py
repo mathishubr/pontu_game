@@ -1,5 +1,4 @@
-import utils.minimax
-from utils.state import State
+import minimax
 
 """
 Class that represents a agent.
@@ -41,7 +40,7 @@ class AlphaBetaAgent(Agent):
         It must return an action representing the move the player
         will perform.
         """
-        return utils.minimax.search(state, self)
+        return minimax.search(state, self)
 
     def successors(self, state):
         """The successors function must return (or yield) a list of
