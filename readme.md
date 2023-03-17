@@ -26,7 +26,7 @@ You can run a match by executing the ```pontu_play.py``` script as follows (you 
 
 **Usage:**
 
-      python pontu_play.py -ai0 ai_0.py -ai1 ai_1.py -t 600 -f 0
+      python pontu_play.py -ai0 ai_0 -ai1 ai_1 -t 600 -f 0
 
       -ai0 
           path to the ai that will play as player 0
@@ -40,18 +40,18 @@ You can run a match by executing the ```pontu_play.py``` script as follows (you 
 
 **Examples:**
 
-        python pontu_play.py -ai0 ai_0.py -ai1 ai_1.py -f 0
+        python pontu_play.py -ai0 ai_0 -ai1 ai_1 -f 0
 
-        python pontu_play.py -ai0 random_agent.py -ai1 human_agent.py -f 1
+        python pontu_play.py -ai0 random_agent -ai1 human_agent -f 1
 
 ### Allowed time for each AI
 The ```-t``` option allows you to specify the overall time (in seconds) allowed for all AI moves of each agent. If an agent exceeds his budget, he automatically loses the game.
 
 **Example:**
 
-         python main.py -ai0 ai_0.py -ai1 ai_1.py -t 120 -f 0
+         python main.py -ai0 ai_0 -ai1 ai_1 -t 120 -f 0
 
-         python main.py -ai0 random_agent.py -ai1 random_agent.py -t 120 -f 1
+         python main.py -ai0 random_agent -ai1 random_agent -t 120 -f 1
 
 ### Pontu Rules
 The goal of the game is to isolate all of your opponent's elves.

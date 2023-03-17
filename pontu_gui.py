@@ -62,7 +62,9 @@ class GUIState():
     def display_winner(self,state):
         quit = False
         # Game finished: display the winner
+        clock = pygame.time.Clock()
         while not quit:
+            clock.tick(30)
             # Draw board
             self.screen.fill(0)
             self.display_state(state,display_current_player=False)
@@ -97,9 +99,7 @@ class GUIState():
 
             # Update screen
             pygame.display.flip()
-
             for event in pygame.event.get():
-
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit = True
