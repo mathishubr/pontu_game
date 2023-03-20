@@ -2,7 +2,9 @@ import pygame
 from agent import Agent
 
 class MyAgent(Agent):
-
+	def __init__(self):
+		self.clock = pygame.time.Clock()
+	
 	def get_action(self, state, last_action, time_left):
 		select_pawn = False
 		pawn_id = None
@@ -11,10 +13,13 @@ class MyAgent(Agent):
 		select_bridge = False
 		action = None
 		actions = state.get_current_player_actions()
+
 		if actions[0][0] is None:
 			select_pawn = True
 			moved_pawn = True
+		
 		while not select_pawn:
+			self.clock.tick(30)
 			for event in pygame.event.get():
 				if event.type == pygame.MOUSEBUTTONUP:
 					pos = pygame.mouse.get_pos()
@@ -34,6 +39,7 @@ class MyAgent(Agent):
 					return ('rage-quit', None, None, None, None)
 
 		while not moved_pawn:
+			self.clock.tick(30)
 			for event in pygame.event.get():
 				if event.type == pygame.MOUSEBUTTONUP:
 					pos = pygame.mouse.get_pos()
@@ -64,6 +70,7 @@ class MyAgent(Agent):
 					return ('rage-quit', None, None, None, None)
 
 		while not select_bridge:
+			self.clock.tick(30)
 			for event in pygame.event.get():
 				if event.type == pygame.MOUSEBUTTONUP:
 					pos = pygame.mouse.get_pos()
