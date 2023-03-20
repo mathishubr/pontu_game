@@ -5,7 +5,7 @@ import signal
 import traceback
 from threading import Thread
 
-def play_game(init_state, names, players, total_time):
+def play_game(init_state, names, players, total_time, display_gui):
     # create the initial state
     state = init_state
     # initialize the time left for each player
@@ -17,16 +17,18 @@ def play_game(init_state, names, players, total_time):
     exception = ''
     action = None
     last_action = None
-    gui = GUIState()
+    if display_gui:
+        gui = GUIState()
     # loop until the game is over
 
     while not state.game_over():
         cur_player = state.get_cur_player()
         timer_stop = [False]
-        timer = TimerDisplay(gui, cur_player, time_left.copy(), timer_stop)
-        gui.display_state(state)
-        pygame.display.flip()
-        timer.start()
+        if display_gui:
+            timer = TimerDisplay(gui, cur_player, time_left.copy(), timer_stop)
+            gui.display_state(state)
+            pygame.display.flip()
+            timer.start()
         try:
             action, exe_time = get_action_timed(players[cur_player], state, last_action, time_left[cur_player])
         except TimeoutError:
@@ -66,8 +68,10 @@ def play_game(init_state, names, players, total_time):
                 invalidaction = cur_player
                 state.set_invalid_action(cur_player)
                 break
-        timer.join()
-    gui.display_winner(state)
+        if display_gui:
+            timer.join()
+    if display_gui:
+        gui.display_winner(state)
 
     # output the result of the game: 0 if player 0 wins, 1 if player 1 wins and -1 if it is a draw
     # first check if there was timeout, crash, invalid action or quit
