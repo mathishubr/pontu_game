@@ -16,6 +16,10 @@ if __name__ == '__main__':
   first = int(args.f) if args.f == '1' or args.f == '0' else None
   display_gui = args.g == None or args.g.lower() == "true"
 
+  if (agent0 == "human_agent" or agent1 == "human_agent") and display_gui == False:
+    print('The GUI must be diplayed if a human agent is playing')
+    display_gui = True
+
   initial_state = PontuState()
   if first is not None:
     initial_state.cur_player = first
