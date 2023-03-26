@@ -38,6 +38,8 @@ You can run a match by executing the ```pontu_play.py``` script as follows (you 
            indicates the player (0 or 1) that plays first; random otherwise
       -g   
            display GUI (true or false); by default true
+      -v,  --verbosity
+           Increase output verbosity (maximum is 3)
 
 
 **Examples:**
@@ -45,6 +47,8 @@ You can run a match by executing the ```pontu_play.py``` script as follows (you 
         python pontu_play.py -ai0 ai_0 -ai1 ai_1 -f 0 -g true
 
         python pontu_play.py -ai0 random_agent -ai1 human_agent -f 1 -g true
+
+        python pontu_play.py -ai0 random_agent -ai1 my_agent -g true -v
 
 ### Allowed time for each AI
 The ```-t``` option allows you to specify the overall time (in seconds) allowed for all AI moves of each agent. If an agent exceeds his budget, he automatically loses the game.
