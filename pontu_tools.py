@@ -5,7 +5,7 @@ import signal
 import traceback
 from threading import Thread
 
-def play_game(init_state, names, players, total_time, display_gui):
+def play_game(init_state, names, players, total_time, display_gui, verbosity):
     # create the initial state
     state = init_state
     # initialize the time left for each player
@@ -81,7 +81,6 @@ def play_game(init_state, names, players, total_time, display_gui):
     # would be a tie, which can lead to confusion.
     if crashed != -1:
         gui.display_crash(state)
-        print(full_trace)
     elif display_gui:
         gui.display_winner(state)
 
@@ -91,6 +90,8 @@ def play_game(init_state, names, players, total_time, display_gui):
         return (1 - timedout, names[timedout] + ' timed out', total_time - time_left[0], total_time - time_left[1],
                 state.get_scores())
     elif crashed != -1:
+        if verbosity > 0:
+            print(full_trace)
         return (
         1 - crashed, names[crashed] + ' crashed: ' + exception, total_time - time_left[0], total_time - time_left[1],
         state.get_scores())
