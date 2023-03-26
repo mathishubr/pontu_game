@@ -15,6 +15,7 @@ def play_game(init_state, names, players, total_time, display_gui):
     invalidaction = -1
     quit = -1
     exception = ''
+    full_trace = ''
     action = None
     last_action = None
     if display_gui:
@@ -36,11 +37,14 @@ def play_game(init_state, names, players, total_time, display_gui):
             timedout = cur_player
             state.set_timed_out(cur_player)
             break
-        except Exception as e:
+        except Exception:
             trace = traceback.format_exc().split('\n')
+            # Use `exception` as error abbrev. and `full_trace` for the full trace stack
             exception = trace[len(trace) - 2]
+            full_trace = traceback.format_exc()
             # set that the current player crashed
             crashed = cur_player
+            timer_stop[0] = True
             break
         else:
             # update time
@@ -70,7 +74,15 @@ def play_game(init_state, names, players, total_time, display_gui):
                 break
         if display_gui:
             timer.join()
-    if display_gui:
+    
+    # When the game crashed, print the error message in the console
+    # and tell the user (watching the screen) that there was an error
+    # Don't display the winner - there is non on game crash, so it
+    # would be a tie, which can lead to confusion.
+    if crashed != -1:
+        gui.display_crash(state)
+        print(full_trace)
+    elif display_gui:
         gui.display_winner(state)
 
     # output the result of the game: 0 if player 0 wins, 1 if player 1 wins and -1 if it is a draw
