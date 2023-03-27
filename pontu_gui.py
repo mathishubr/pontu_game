@@ -128,3 +128,27 @@ class GUIState():
         textRect = text.get_rect()
         textRect.center = (self.size * 100 - 100, self.size * 100 - 20)
         self.screen.blit(text, textRect)
+
+    def display_crash(self, state) -> None:
+        """Display a crash message in the PyGame window"""
+        # Draw board and current game state
+        self.screen.fill(0)
+        self.display_state(state, display_current_player=False)
+
+        # Message font
+        font = pygame.font.Font("freesansbold.ttf", 24)
+        text = font.render(" The game crashed! ", True, "yellow", "black")
+
+        textRect = text.get_rect()
+        textRect.center = ((self.size*2-1)*25, self.size * 100 - 30)
+        self.screen.blit(text, textRect)
+
+        # Update screen
+        pygame.display.flip()
+
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    running = False
