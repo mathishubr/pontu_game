@@ -79,10 +79,11 @@ def play_game(init_state, names, players, total_time, display_gui, verbosity):
     # and tell the user (watching the screen) that there was an error
     # Don't display the winner - there is non on game crash, so it
     # would be a tie, which can lead to confusion.
-    if crashed != -1:
-        gui.display_crash(state)
-    elif display_gui:
-        gui.display_winner(state)
+    if display_gui:
+        if crashed != -1:
+            gui.display_crash(state)
+        else:
+            gui.display_winner(state)
 
     # output the result of the game: 0 if player 0 wins, 1 if player 1 wins and -1 if it is a draw
     # first check if there was timeout, crash, invalid action or quit
