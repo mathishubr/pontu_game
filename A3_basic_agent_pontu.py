@@ -33,7 +33,7 @@ class MyAgent(AlphaBetaAgent):
   search has to stop and false otherwise.
   """
   def cutoff(self, state, depth):
-    return state.game_over() or depth == 1
+    return state.game_over() or depth == 2
 
   """
   The evaluate function must return an integer value
